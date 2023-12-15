@@ -1,0 +1,76 @@
+{
+    "grass 1":{
+        "x":0,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 30,
+        "direction":"down"
+    },
+    "grass 2":{
+        "x":32,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 30,
+        "direction":"down"
+    },
+    "grass 3":{
+        "x":128,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 30,
+        "direction":"down"
+    },
+    "grass 4":{
+        "x":224,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 30,
+        "direction":"down"
+    },
+    "flower 1":{
+        "x":64,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 40,
+        "direction":"down"
+    },
+    "flower 2":{
+        "x":96,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 40,
+        "direction":"down"
+    },
+    "flower 3":{
+        "x":160,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 40,
+        "direction":"down"
+    },
+    "flower 4":{
+        "x":192,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 5,
+        "frame delay": 40,
+        "direction":"down"
+    }
+
+
+}

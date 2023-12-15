@@ -1,0 +1,39 @@
+{
+    "up":{
+        "x":0,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 4,
+        "frame delay": 3,
+        "direction":"down"
+    },
+    "right":{
+        "x":32,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 4,
+        "frame delay": 4,
+        "direction":"down"
+    },
+    "left":{
+        "x":64,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 4,
+        "frame delay": 4,
+        "direction":"down"
+    },
+    "down":{
+        "x":96,
+        "y":0,
+        "width": 32,
+        "height":32,
+        "frames": 4,
+        "frame delay": 4,
+        "direction":"down"
+    }
+
+}

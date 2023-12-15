@@ -1,0 +1,26 @@
+{
+    "up":{
+        "x":0,
+        "y":0,
+        "width":32,
+        "height":32
+    },
+    "down":{
+        "x":96,
+        "y":0,
+        "width":32,
+        "height":32
+    },
+    "left":{
+        "x":64,
+        "y":0,
+        "width":32,
+        "height":32
+    },
+    "right":{
+        "x":32,
+        "y":0,
+        "width":32,
+        "height":32
+    }
+}
