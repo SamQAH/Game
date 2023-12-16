@@ -8,8 +8,7 @@ import chunk.ChunkManager;
 import java.io.*;
 
 import entitiy.Player;
-import tile.FoliageManager;
-import tile.TileManager;
+
 
 public class GamePanel extends JPanel implements Runnable{
     
@@ -26,6 +25,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int SCREENHEIGHT = MAXSCREENROW * TILESIZE;
 
     int FPS = 60;
+
+    public int frameCounter;
 
     KeyHandler kh = new KeyHandler();
 
@@ -62,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable{
         long lasttime = System.nanoTime();
         long currenttime;
         long deltaTime = 1; // can be used for true speed calculations
+        frameCounter = 0;
         
 
         while(gameThread != null){
@@ -74,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
                 update();
                 repaint();
                 frameFraction--;
+                frameCounter++;
             }
 
             if(chunkcounter >= 5){

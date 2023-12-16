@@ -29,6 +29,7 @@ public class Chunk{
     String foliageData;
     FoliageManager fm;
     File file;
+    String chunkType;
 
     public Chunk(GamePanel gp, int[] coord, int seed){
         this.gp = gp;
@@ -36,38 +37,69 @@ public class Chunk{
         fileName = "src/chunk/chunk_data/chunk_"+id[0]+"_"+id[1]+".txt";
         file = new File(fileName);
 
-        if(!file.exists()){
-            this.generateChunk(seed);
-        }
+        // if(!file.exists()){
+        //     this.generateChunk(seed);
+        // } TODO
+        this.getChunkType();
+        this.generateChunk(seed);
         this.parseData();
+        
 
         fm = new FoliageManager(gp,this.getFoliageData());
         tm = new TileManager(gp, this.getTileData());
 
     }
+
+    public void getChunkType(){
+        if(id[0] < -1){
+            chunkType = "ocean";
+        }else if(id[0] == -1){
+            chunkType = "beach";
+        }else{
+            chunkType = "plains";
+        }
+    }
     
     public void generateChunk(int seed){
+        /*
+         * calculate the chunk type:
+         * plains
+         * ocean
+         * beach
+         * ocean beach vertical blend
+         * 
+         * write tiles
+         * write foliage
+         */
+        
         Random random = new Random(seed);
         int[] currentCoord = new int[]{0,0};
         try{
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 
-            while(currentCoord[1]<chunkSize[1]){
-                bufferedWriter.write(0+" ");
-                currentCoord[0]++;
-                if(currentCoord[0] == chunkSize[0]){
-                    currentCoord[0] = 0;
-                    currentCoord[1]++;
-                    bufferedWriter.newLine();
-                }
-            }
+            this.calculateTileString(random, bufferedWriter);
+
 
             bufferedWriter.write("section break\n");
             currentCoord[0] = 0;
             currentCoord[1] = 0;
 
             while(currentCoord[1]<chunkSize[1]){
-                int num = random.nextInt(20); //writing foliage
+                int num;
+                switch(chunkType){
+                    case "plains":
+                    num = random.nextInt(20);
+                    break;
+                    case "ocean":
+                    num = -1;
+                    break;
+                    case "beach":
+                    num = random.nextInt(100);
+                    break;
+                    default:
+                    num = -1;
+                    break;
+                }
                 bufferedWriter.write(num+" ");
                 currentCoord[0]++;
                 if(currentCoord[0] == chunkSize[0]){
@@ -81,6 +113,77 @@ public class Chunk{
         }catch(Exception e){
             e.printStackTrace();
         }
+
+    }
+
+    private void calculateTileString(Random random, BufferedWriter bufferedWriter){
+
+        try{
+            int[] currentCoord = new int[]{0,0};
+            switch(chunkType){
+                case "plains":
+                    while(currentCoord[1]<chunkSize[1]){
+                        bufferedWriter.write(0+" ");
+                        currentCoord[0]++;
+                        if(currentCoord[0] == chunkSize[0]){
+                            currentCoord[0] = 0;
+                            currentCoord[1]++;
+                            bufferedWriter.newLine();
+                        }
+                    }
+                    break;
+                case "ocean":
+                    while(currentCoord[1]<chunkSize[1]){
+                        double val = random.nextDouble();
+                        if(currentCoord[0] == chunkSize[0]-1){
+                            bufferedWriter.write(4+" ");
+                        }else if(currentCoord[0] > 20 && val > 0.9){
+                            bufferedWriter.write(2+" ");
+                        }else{
+                            bufferedWriter.write(1+" ");
+                        }
+                        
+                        currentCoord[0]++;
+                        if(currentCoord[0] == chunkSize[0]){
+                            currentCoord[0] = 0;
+                            currentCoord[1]++;
+                            bufferedWriter.newLine();
+                        }
+                    }
+                    break;
+                case "beach":
+                    while(currentCoord[1]<chunkSize[1]){
+                        double val = random.nextDouble();
+                        if(currentCoord[0] > 29 && val > 0.5){
+                            bufferedWriter.write(0+" ");
+                        }else{
+                            bufferedWriter.write(9+" ");
+                        }
+                        currentCoord[0]++;
+                        if(currentCoord[0] == chunkSize[0]){
+                            currentCoord[0] = 0;
+                            currentCoord[1]++;
+                            bufferedWriter.newLine();
+                        }
+                    }
+                    break;
+                default:
+                    currentCoord = new int[]{0,0};
+                    while(currentCoord[1]<chunkSize[1]){
+                        bufferedWriter.write(0+" ");
+                        currentCoord[0]++;
+                        if(currentCoord[0] == chunkSize[0]){
+                            currentCoord[0] = 0;
+                            currentCoord[1]++;
+                            bufferedWriter.newLine();
+                        }
+                    }
+                    break;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -126,7 +229,7 @@ public class Chunk{
     }
 
     public void draw(Graphics2D g2){
-        tm.draw(g2, id);
+        tm.draw(g2, id, gp.frameCounter);
         fm.draw(g2, id);
     }
 

@@ -1,0 +1,46 @@
+{
+    "open ocean":{
+        "x": 96,
+        "y": 0,
+        "width": 32,
+        "height": 32,
+        "frames": 3,
+        "frame delay": 30
+    },
+
+    "ocean sand middle":{
+        "x": 0,
+        "y": 0,
+        "width": 32,
+        "height": 32,
+        "frames": 3,
+        "frame delay": 30
+    },
+
+    "ocean sand bottom right":{
+        "x": 32,
+        "y": 0,
+        "width": 32,
+        "height": 32,
+        "frames": 3,
+        "frame delay": 30
+    },
+
+    "ocean sand bottom":{
+        "x": 64,
+        "y": 0,
+        "width": 32,
+        "height": 32,
+        "frames": 3,
+        "frame delay": 30
+    },
+
+    "ocean sand right":{
+        "x": 128,
+        "y": 0,
+        "width": 32,
+        "height": 32,
+        "frames": 3,
+        "frame delay": 30
+    }
+}

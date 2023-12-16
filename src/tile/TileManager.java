@@ -1,10 +1,16 @@
 package tile;
 
 import java.awt.Graphics2D;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import org.json.JSONObject;
+
+import Utility.AnimationHandler;
 import chunk.Chunk;
 import main.GamePanel;
 
@@ -23,8 +29,23 @@ public class TileManager {
 
     public void getTileImage(){
         try{
-            tiles[0] = new Tile();
+            BufferedImage oceanSS = ImageIO.read(getClass().getResourceAsStream("/res/ocean/Ocean_Sand_Blend_Master.png"));
+            String location = new String("src/res/ocean/Ocean_Sand_Blend.json");
+            File file = new File(location);
+            String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
+            JSONObject oceandata = new JSONObject(content);
+            AnimationHandler ah = new AnimationHandler(oceanSS, oceandata);
+
+            for(int i = 0; i < 10; i++){
+                tiles[i] = new Tile();
+            }
             tiles[0].image = ImageIO.read(getClass().getResourceAsStream("/res/ground_field/field_tile.png"));
+            tiles[1].animation = ah.getAnimation("open ocean");
+            tiles[2].animation = ah.getAnimation("ocean sand middle");
+            tiles[3].animation = ah.getAnimation("ocean sand bottom");
+            tiles[4].animation = ah.getAnimation("ocean sand right");
+            tiles[5].animation = ah.getAnimation("ocean sand bottom right");
+            tiles[9].image = ImageIO.read(getClass().getResourceAsStream("/res/ocean/Sand.png"));
 
         }catch(Exception e){
             e.printStackTrace();
@@ -32,7 +53,7 @@ public class TileManager {
     }
 
 
-    public void draw(Graphics2D g2, int[] chunkid){
+    public void draw(Graphics2D g2, int[] chunkid, int counter){
         /*
          * loop through all loaded chunks
          * calculate the world coordinate of the tiles
@@ -54,14 +75,17 @@ public class TileManager {
             int screenx = pScreenPos[0]-pWorldPos[0]+worldx;
             int screeny = pScreenPos[1]-pWorldPos[1]+worldy;
 
-            if(screenx>-gp.TILESIZE && screenx<gp.SCREENWIDTH &&
-                screeny>-gp.TILESIZE && screeny<gp.SCREENHEIGHT ){
-                g2.drawImage(tiles[Integer.parseInt(strKeys[i])].image, screenx,screeny,gp.TILESIZE,gp.TILESIZE,null);
+            if(screenx>-gp.TILESIZE && screenx<gp.SCREENWIDTH && screeny>-gp.TILESIZE && screeny<gp.SCREENHEIGHT ){
+                Tile currenttile = tiles[Integer.parseInt(strKeys[i])];
+                BufferedImage display;
+                if(currenttile.animation == null){
+                    display = currenttile.image;
+                }else{
+                    display = currenttile.animation.getCurrentFrame(counter);
+                }
+                g2.drawImage(display, screenx,screeny,gp.TILESIZE,gp.TILESIZE,null);
+
             }
         }
-
-            
-
-        
     }
 }

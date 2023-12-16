@@ -38,7 +38,7 @@ public class AnimationHandler {
         }
     }
 
-    public Animation geAnimation(String key){
+    public Animation getAnimation(String key){
         return ani.get(key);
     }
 
