@@ -39,7 +39,8 @@ public class TileManager {
             for(int i = 0; i < 10; i++){
                 tiles[i] = new Tile();
             }
-            tiles[0].image = ImageIO.read(getClass().getResourceAsStream("/res/ground_field/field_tile.png"));
+            tiles[0].image = ImageIO.read(getClass().getResourceAsStream("/res/ground_field/grassy_field.png"));
+            tiles[8].image = ImageIO.read(getClass().getResourceAsStream("/res/ground_field/field_tile.png"));
             tiles[1].animation = ah.getAnimation("open ocean");
             tiles[2].animation = ah.getAnimation("ocean sand middle");
             tiles[3].animation = ah.getAnimation("ocean sand bottom");

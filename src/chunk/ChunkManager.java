@@ -28,7 +28,7 @@ public class ChunkManager {
         this.updateChunks();
     }
 
-    public void updateChunks(){
+    public synchronized void updateChunks(){
         //find current chunk
         int[] currentChunk = new int[]{(int)Math.floor((double)p.worldx/gp.TILESIZE/Chunk.chunkSize[0]),(int)Math.floor((double)p.worldy/gp.TILESIZE/Chunk.chunkSize[1])};
         ArrayList<int[]> loadedChunksID = new ArrayList<>();
@@ -80,11 +80,11 @@ public class ChunkManager {
 
     }
 
-    public void draw(Graphics2D g2){ //TODO fix concurrent modification error
+    public synchronized void draw(Graphics2D g2){ //TODO fix concurrent modification error
         for(int[] key : loadedChunks.keySet()){
             Chunk c = loadedChunks.get(key);
             c.draw(g2);
-            
+             
         }
     }
 }
