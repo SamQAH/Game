@@ -1,0 +1,5 @@
+$ git status
+
+$ cat src/chunk/chunk_data/ .gitignore
+
+*.txt
