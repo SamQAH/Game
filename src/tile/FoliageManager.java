@@ -17,12 +17,14 @@ import main.GamePanel;
 public class FoliageManager {
     AnimationHandler ah;
     GamePanel gp;
+    String data;
     Foliage[][] foli;
 
-    public FoliageManager(GamePanel gp, String data){
+    public FoliageManager(GamePanel gp, int[][] data){
         this.getAnimation();
-        this.setFoliage(data.strip());
+        this.setFoliage(data);
         this.gp = gp;
+
     }
 
     public void getAnimation(){
@@ -38,39 +40,37 @@ public class FoliageManager {
         }
     }
 
-    public void setFoliage(String data){
-        foli = new Foliage[Chunk.chunkSize[0]][Chunk.chunkSize[1]];
-        String[] strKeys = data.split(" ");
-        int row;
-        int col;
-        for(int i = 0; i<strKeys.length;i++){
-            row = i % Chunk.chunkSize[0];
-            col = i / Chunk.chunkSize[1];
+    public void setFoliage(int[][] data){
+        foli = new Foliage[data.length][data[0].length];
+        int row = 0;
+        int col = 0;
+        while(col < data[0].length){
+            int val = data[col][row];
 
             String name;
-            switch(strKeys[i]){
-                case "0":
+            switch(val){
+                case 0:
                 name = "grass 1";
                 break;
-                case "1":
+                case 1:
                 name = "grass 2";
                 break;
-                case "2":
+                case 2:
                 name = "grass 3";
                 break;
-                case "3":
+                case 3:
                 name = "grass 4";
                 break;
-                case "4":
+                case 4:
                 name = "flower 1";
                 break;
-                case "5":
+                case 5:
                 name = "flower 2";
                 break;
-                case "6":
+                case 6:
                 name = "flower 3";
                 break;
-                case "7":
+                case 7:
                 name = "flower 4";
                 break;
                 default:
@@ -79,9 +79,14 @@ public class FoliageManager {
             }
             if(name != null){
                 foli[row][col] = new Foliage(ah.getAnimation(name));
-
+                
             }
-
+            
+            row++;
+            if(row == data.length){
+                row = 0;
+                col++;
+            }
         }
 
     }

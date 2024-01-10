@@ -81,7 +81,7 @@ public class GamePanel extends JPanel implements Runnable{
 
             if(chunkcounter >= 5){
                 cm.updateChunks();
-                //System.out.println("update chunk");
+                //System.out.println(player.worldx+" "+player.worldy);
                 chunkcounter-=5;
             }
             

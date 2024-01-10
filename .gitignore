@@ -2,4 +2,8 @@ $ git status
 
 $ cat src/chunk/chunk_data/ .gitignore
 
-*.txt
+chunk_data/
+
+file.txt
+
+.vscode

@@ -80,7 +80,7 @@ public class ChunkManager {
 
     }
 
-    public synchronized void draw(Graphics2D g2){ //TODO fix concurrent modification error
+    public synchronized void draw(Graphics2D g2){
         for(int[] key : loadedChunks.keySet()){
             Chunk c = loadedChunks.get(key);
             c.draw(g2);

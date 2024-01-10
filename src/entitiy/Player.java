@@ -51,25 +51,29 @@ public class Player extends Entity {
     //determine the state of the player by key inputs
     public void update(){
         if(kh.uppressed){
-            worldy -= speed;
+            yVelocity = -speed;
             direction = lastdirection = "up";
-        }
-        if(kh.downpressed){
-            worldy += speed;
+        }else if(kh.downpressed){
+            yVelocity = speed;
             direction = lastdirection = "down";
+        }else{
+            yVelocity = 0;
         }
+        
         if(kh.leftpressed){
-            worldx -= speed;
+            xVelocity = -speed;
             direction = lastdirection = "left";
-        }
-        if(kh.rightpressed){
-            worldx += speed;
+        }else if(kh.rightpressed){
+            xVelocity = speed;
             direction = lastdirection = "right";
+        }else{
+            xVelocity = 0;
         }
         if(!(kh.uppressed || kh.downpressed || kh.leftpressed || kh.rightpressed)){
             direction = "still";
         }
-
+        worldx += xVelocity;
+        worldy += yVelocity;
         
     }
 
