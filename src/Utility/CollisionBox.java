@@ -54,7 +54,10 @@ public class CollisionBox{
   public void move(int x, int y){
     globalx += x;
     globaly += y;
-    this.setMesh();
+    for(int i = 0; i < mesh.length; i++){
+      coord[i][0] += x;
+      coord[i][1] += y;
+    }
   }
 
   public void checkCollidePlural(ArrayList<CollisionBox> cbs){
