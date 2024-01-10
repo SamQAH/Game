@@ -54,6 +54,14 @@ public class CollisionBox{
   public void move(int x, int y){
     globalx += x;
     globaly += y;
+    this.setMesh();
+  }
+
+  public void checkCollidePlural(ArrayList<CollisionBox> cbs){
+    this.reset();
+    for(CollisionBox cb : cbs){
+      this.checkCollideAdd(cb);
+    }
   }
 
   //returns [up, right, down, left]
