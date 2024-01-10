@@ -57,13 +57,16 @@ public class CollisionBox{
   }
 
   //returns [up, right, down, left]
-  public void checkCollide(CollisionBox cb){
+  public void checkCollideAdd(CollisionBox cb){
     /*
-     * check four corners first?
      * 
-     * TODO check for no collision
+     * if there is a collision, set the corresponding side to true
+     * cb.checkCollide(this)
      */
-    boolean[] noCollisionTally = new boolean[]{true, true, true, true};
+    for (int i = 0; i < collisionSides.length; i++){
+      collisionSides[i] = false;
+    }
+
     for(int i = 0; i < mesh.length; i++){
       if(cb.checkCollide(mesh[i][0], mesh[i][1])){
         int perimeterOffset = i/(widthPartision+heightPartision);
@@ -71,10 +74,9 @@ public class CollisionBox{
         if(widthPartision <= simplifiedIndex && simplifiedIndex <= widthPartision + heightPartision){
           collisionSides[1 + perimeterOffset * 2] = true;
           //optimisations
-          if(perimeterOffset == 1){
-            return;
+          if(perimeterOffset == 0){
+            i = widthPartision + heightPartision;
           }
-          i = widthPartision + heightPartision;
         }
         if(0 <= simplifiedIndex && simplifiedIndex <= widthPartision){
           collisionSides[perimeterOffset * 2] = true;
@@ -85,23 +87,57 @@ public class CollisionBox{
           collisionSides[0] = true;
           collisionSides[3] = true;
         }
-      }else{
-        //TODO
       }
     }
   }
-  public boolean checkCollide(int x, int y){
-    if(globalx <= x && x <= globalx + width && globaly <= y && y <= globaly + height){
-      return true;
+
+  public boolean[] checkCollideExclusive(CollisionBox cb){
+
+    boolean[] sides = new boolean[]{false,false,false,false};
+    for(int i = 0; i < mesh.length; i++){
+      if(cb.checkCollide(mesh[i][0], mesh[i][1])){
+        int perimeterOffset = i/(widthPartision+heightPartision);
+        int simplifiedIndex = i%(widthPartision+heightPartision);
+        if(widthPartision <= simplifiedIndex && simplifiedIndex <= widthPartision + heightPartision){
+          sides[1 + perimeterOffset * 2] = true;
+          //optimisations
+          if(perimeterOffset == 0){
+            i = widthPartision + heightPartision;
+          }
+        }
+        if(0 <= simplifiedIndex && simplifiedIndex <= widthPartision){
+          sides[perimeterOffset * 2] = true;
+          //optimizations
+          i = widthPartision + perimeterOffset * (widthPartision + heightPartision);
+        }
+        if(i == 0){
+          sides[0] = true;
+          sides[3] = true;
+        }
+      } 
     }
-    return false;
+    return sides;
+  
+    
+  }
+
+  public void reset(){
+
+    for(int i = 0; i < collisionSides.length; i++){
+      collisionSides[i] = false;
+    }
+  }
+  public boolean checkCollide(int x, int y){
+    if(x < globalx || x > globalx + width || y < globaly || y > globaly + height){
+      return false;
+    }
+    return true;
   }
   
-  public boolean checkCollide(int side){
+  public boolean getCollideSide(int side){
     return collisionSides[side];
   }
   public boolean[] getCollideSides(){
     return collisionSides;
   }
 }
-
