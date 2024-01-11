@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import org.json.JSONObject;
 
 import Utility.AnimationHandler;
+import Utility.CollisionBox;
 import Utility.SpriteHandler;
 import main.GamePanel;
 
@@ -45,11 +46,15 @@ public class Player extends Entity {
         currentChunk = new int[]{0,0};
         speed = 5;
         direction = "up";
+        hitbox = new CollisionBox(16, 16, 108, 108);
 
     }
 
     //determine the state of the player by key inputs
     public void update(){
+        worldx += xVelocity;
+        worldy += yVelocity;
+        hitbox.move(xVelocity,yVelocity);
         if(kh.uppressed){
             yVelocity = -speed;
             direction = lastdirection = "up";
@@ -72,8 +77,7 @@ public class Player extends Entity {
         if(!(kh.uppressed || kh.downpressed || kh.leftpressed || kh.rightpressed)){
             direction = "still";
         }
-        worldx += xVelocity;
-        worldy += yVelocity;
+
         
     }
 

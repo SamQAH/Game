@@ -66,6 +66,21 @@ public class Chunk{
         }
     }
 
+    public static int[] addToAll(int[] arr, int num){
+        int[] temp = new int[arr.length];
+        for(int i = 0; i < arr.length; i++){
+            temp[i] = arr[i] + num;
+        }
+        return temp;
+    }
+
+    public static int[] toGlobalOrigin(int[] chunkCoords){
+        int[] temp = new int[2];
+        temp[0] = chunkCoords[0] * chunkSize[0];
+        temp[1] = chunkCoords[1] * chunkSize[1];
+        return temp;
+    }
+
     public int[] convertGlobal(int[] coords){
         int[] temp = new int[2];
         temp[0] = coords[0] + id[0] * chunkSize[0];

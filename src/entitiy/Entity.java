@@ -2,6 +2,8 @@ package entitiy;
 
 import java.awt.image.BufferedImage;
 
+import Utility.CollisionBox;
+
 public class Entity {
     public int worldx, worldy, x, y;
     public int speed;
@@ -16,6 +18,24 @@ public class Entity {
 
     public int frameCounter;
     public int frameNumber;
+
+    public CollisionBox hitbox;
+
+    public void updateVelocity(){
+        if((hitbox.getCollideSide(0) && yVelocity < 0) || (hitbox.getCollideSide(2) && yVelocity > 0)){
+            yVelocity = 0;
+        }
+        if((hitbox.getCollideSide(1) && xVelocity > 0) || (hitbox.getCollideSide(3) && xVelocity < 0)){
+            xVelocity = 0;
+        }
+    }
+
+    public CollisionBox getHitbox() {
+        return hitbox;
+    }
+    public void setHitbox(CollisionBox hitbox) {
+        this.hitbox = hitbox;
+    }
     public int getWorldx() {
         return worldx;
     }

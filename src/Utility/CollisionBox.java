@@ -1,10 +1,13 @@
 package Utility;
 
+import java.util.ArrayList;
+
 public class CollisionBox{
   private static final double margin = 16; // true margin / 2
   int width, height, globalx, globaly, widthPartision, heightPartision;
   int[][] mesh;
   boolean[] collisionSides;
+  
   public CollisionBox(int width, int height, int x, int y){
     this.width = width;
     this.height = height;
@@ -55,13 +58,12 @@ public class CollisionBox{
     globalx += x;
     globaly += y;
     for(int i = 0; i < mesh.length; i++){
-      coord[i][0] += x;
-      coord[i][1] += y;
+      mesh[i][0] += x;
+      mesh[i][1] += y;
     }
   }
 
-  public void checkCollidePlural(ArrayList<CollisionBox> cbs){
-    this.reset();
+  public void addCollidePlural(ArrayList<CollisionBox> cbs){
     for(CollisionBox cb : cbs){
       this.checkCollideAdd(cb);
     }
