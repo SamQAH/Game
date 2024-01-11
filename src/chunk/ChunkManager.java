@@ -8,6 +8,7 @@ import java.util.Set;
 
 import entitiy.Player;
 import main.GamePanel;
+import Utility.CollisionManager;
 
 
 /*
@@ -18,6 +19,7 @@ import main.GamePanel;
 public class ChunkManager {
     Player p;
     GamePanel gp;
+    CollisionManager cm;
     HashMap<int[],Chunk> loadedChunks;
     final int seed = 123456;
 
@@ -26,6 +28,7 @@ public class ChunkManager {
         this.p = player;
         loadedChunks = new HashMap<>();
         this.updateChunks();
+        cm = new CollisionManager(this.p);
     }
 
     public synchronized void updateChunks(){
