@@ -17,6 +17,7 @@ import main.GamePanel;
 import tile.FoliageManager;
 import tile.TileSet;
 import tile.TileManager;
+import Utility.CollisionBox;
 
 
 /*
@@ -36,6 +37,7 @@ public class Chunk{
 
     int[][] tileData;
     int[][] foliageData;
+    ArrayList<CollisionBox> collisionData;
 
     private static double octave = 0.5;
     private static int frequency = 2;
@@ -81,6 +83,22 @@ public class Chunk{
         return temp;
     }
 
+    public static CollisionBox findTileCollision(int index, int[] globalCoords){
+        if(index >= 1 && index <= 16 && index != 9){
+            return new CollisionBox(globalCoords[0], globalCoords[1], gp.TILESIZE, gp.TILESIZE);
+        }else{
+            return;
+        }
+    }
+
+    public int[] convertGlobalCoords(int row, int col){
+        int[] temp = convertGloabl(row, col);
+        temp *= gp.TILESIZE;
+        temp *= gp.TILESIZE;
+        return temp;
+    }
+    
+
     public int[] convertGlobal(int[] coords){
         int[] temp = new int[2];
         temp[0] = coords[0] + id[0] * chunkSize[0];
@@ -103,7 +121,6 @@ public class Chunk{
         return OceanBlendRules.findBlendedTile(cd);
     }
 
-
     public Chunk(GamePanel gp, int[] coord, int seed){
         this.gp = gp;
         id = coord;
@@ -123,14 +140,25 @@ public class Chunk{
         tm = new TileManager(gp, tileData);
 
     }
+
+    public void addCollision(){
+        int row = 0;
+        int col = 0;
+        while(col < tileData.length){
+            CollisionBox temp = findTileCollision(tileData[col][row],convertGlobalCoords(row,col));
+            if(temp != null){
+                collisionData.add(temp);
+            }
+            row ++;
+            if(row == tileData.length){
+                col++;
+                row = 0;
+            }
+        }
+    }
     
     public void generateChunk(int seed){
         /*
-         * calculate the chunk type:
-         * plains
-         * ocean
-         * beach
-         * ocean beach vertical blend
          * 
          * write tiles
          * write foliage
