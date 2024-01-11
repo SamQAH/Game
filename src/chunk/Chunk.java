@@ -131,6 +131,7 @@ public class Chunk{
         //     this.generateChunk(seed);
         // } TODO remove when stop changing generate chunk function
         this.generateChunk(seed);
+        this.addCollision();
         this.blendTiles();
         this.writeData();
         this.parseData();
