@@ -85,16 +85,16 @@ public class Chunk{
 
     public static CollisionBox findTileCollision(int index, int[] globalCoords){
         if(index >= 1 && index <= 16 && index != 9){
-            return new CollisionBox(globalCoords[0], globalCoords[1], gp.TILESIZE, gp.TILESIZE);
+            return new CollisionBox(64,64,globalCoords[0], globalCoords[1]);// refers to static TILESIZE
         }else{
-            return;
+            return null;
         }
     }
 
     public int[] convertGlobalCoords(int row, int col){
-        int[] temp = convertGloabl(row, col);
-        temp *= gp.TILESIZE;
-        temp *= gp.TILESIZE;
+        int[] temp = convertGlobal(row, col);
+        temp[0] *= gp.TILESIZE;
+        temp[1] *= gp.TILESIZE;
         return temp;
     }
     
@@ -126,6 +126,7 @@ public class Chunk{
         id = coord;
         fileName = "src/chunk/chunk_data/chunk_"+id[0]+"_"+id[1]+".txt";
         file = new File(fileName);
+        collisionData = new ArrayList<>();
 
         // if(!file.exists()){
         //     this.generateChunk(seed);

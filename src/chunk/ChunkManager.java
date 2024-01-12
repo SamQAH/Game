@@ -8,6 +8,7 @@ import java.util.Set;
 
 import entitiy.Player;
 import main.GamePanel;
+import Utility.CollisionBox;
 import Utility.CollisionManager;
 
 
@@ -20,6 +21,7 @@ public class ChunkManager {
     Player p;
     GamePanel gp;
     CollisionManager cm;
+    ArrayList<ArrayList<CollisionBox>> loadedCollisions;
     HashMap<int[],Chunk> loadedChunks;
     final int seed = 123456;
 
@@ -27,8 +29,10 @@ public class ChunkManager {
         this.gp = gp;
         this.p = player;
         loadedChunks = new HashMap<>();
-        this.updateChunks();
+        loadedCollisions = new ArrayList<>();
         cm = new CollisionManager(this.p);
+        this.updateChunks();
+        
     }
 
     public synchronized void updateChunks(){
@@ -40,7 +44,6 @@ public class ChunkManager {
                 loadedChunksID.add(new int[]{currentChunk[0]+i,currentChunk[1]+j});
             }
         }
-        
 
         /*
          * remove unused chunks: if in loaded but not id
@@ -48,6 +51,7 @@ public class ChunkManager {
          */
         Set<int[]> currentCoords = loadedChunks.keySet();
 
+        //iter through all the loaded chunks in this.loadedChunks, puts the ones not suppose to be there in marked
         ArrayList<int[]> marked = new ArrayList<>();
         for(int[] key : currentCoords){
             boolean found = false;
@@ -63,10 +67,12 @@ public class ChunkManager {
         }
 
         for(int[] key : marked){
+            loadedCollisions.remove(loadedChunks.remove(key).collisionData);
             currentCoords.remove(key);
             System.out.println("Removed "+key[0]+" "+key[1]);
         }
 
+        //add and creates any chunks that are suppose to be there
         for(int[] coord : loadedChunksID){
             boolean found = false;
             for(int[] key : currentCoords){
@@ -77,9 +83,12 @@ public class ChunkManager {
             }
             if(!found){
                 loadedChunks.put(coord, new Chunk(gp,coord,seed));
+                loadedCollisions.add(loadedChunks.get(coord).collisionData);
                 System.out.println("Added "+coord[0]+" "+coord[1]);
             }
         }
+        
+        cm.updateSubChunks(loadedCollisions);
 
     }
 
@@ -87,7 +96,8 @@ public class ChunkManager {
         for(int[] key : loadedChunks.keySet()){
             Chunk c = loadedChunks.get(key);
             c.draw(g2);
-             
+            
         }
+        cm.update();
     }
 }

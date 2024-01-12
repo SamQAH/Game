@@ -134,6 +134,12 @@ public class CollisionBox{
     
   }
 
+  public void moveTo(int x, int y){
+    globalx = x;
+    globaly = y;
+    setMesh();
+  }
+
   public void reset(){
 
     for(int i = 0; i < collisionSides.length; i++){
@@ -146,11 +152,25 @@ public class CollisionBox{
     }
     return true;
   }
+
+  public boolean checkCollide(CollisionBox cb){
+    // check manhattan distance
+    for(int i = 0; i < mesh.length; i++){
+      if(cb.checkCollide(mesh[i][0], mesh[i][1])){
+        return true;
+      }
+    }
+    return false;
+  }
   
   public boolean getCollideSide(int side){
     return collisionSides[side];
   }
   public boolean[] getCollideSides(){
     return collisionSides;
+  }
+
+  public static int manhattanDistance(CollisionBox one, CollisionBox two){
+    return Math.abs(one.globalx-two.globalx) + Math.abs(one.globaly-two.globaly);
   }
 }

@@ -24,9 +24,11 @@ public class Entity {
     public void updateVelocity(){
         if((hitbox.getCollideSide(0) && yVelocity < 0) || (hitbox.getCollideSide(2) && yVelocity > 0)){
             yVelocity = 0;
+            System.out.println("collision");
         }
         if((hitbox.getCollideSide(1) && xVelocity > 0) || (hitbox.getCollideSide(3) && xVelocity < 0)){
             xVelocity = 0;
+            System.out.println("collision");
         }
     }
 
