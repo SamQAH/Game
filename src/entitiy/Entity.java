@@ -24,12 +24,25 @@ public class Entity {
     public void updateVelocity(){
         if((hitbox.getCollideSide(0) && yVelocity < 0) || (hitbox.getCollideSide(2) && yVelocity > 0)){
             yVelocity = 0;
-            System.out.println("collision");
         }
         if((hitbox.getCollideSide(1) && xVelocity > 0) || (hitbox.getCollideSide(3) && xVelocity < 0)){
             xVelocity = 0;
-            System.out.println("collision");
         }
+    }
+
+    public void printCollide(){
+        for(boolean b : hitbox.getCollideSides()){
+            System.out.print(b+" ");
+        }
+        System.out.println();
+        for(boolean b : hitbox.getAdvancedCollideSides()){
+            System.out.print(b+" ");
+        }
+        System.out.println();
+    }
+
+    public void printPos(){
+        System.out.println(worldx + ", " + worldy);
     }
 
     public CollisionBox getHitbox() {

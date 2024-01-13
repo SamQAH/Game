@@ -1,12 +1,17 @@
 package Utility;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import chunk.Chunk;
+import entitiy.Entity;
+
 public class CollisionBox{
-  private static final double margin = 16; // true margin / 2
+  private static final double margin = 8; // true margin / 2
   int width, height, globalx, globaly, widthPartision, heightPartision;
   int[][] mesh;
   boolean[] collisionSides;
+  boolean[] advancedCollisionSides;
   
   public CollisionBox(int width, int height, int x, int y){
     this.width = width;
@@ -17,7 +22,14 @@ public class CollisionBox{
   }
 
   public void setMesh(){
-    collisionSides = new boolean[]{false,false,false,false};
+    advancedCollisionSides = new boolean[8];
+    collisionSides = new boolean[4];
+    for(int i = 0; i < 8; i++){
+      advancedCollisionSides[i] = false;
+    }
+    for(int i = 0; i < 4; i++){
+      collisionSides[i] = false;
+    }
     /*  0--->  coords around the perimeter
      *  T   |
      *  |   v
@@ -76,29 +88,25 @@ public class CollisionBox{
      * if there is a collision, set the corresponding side to true
      * cb.checkCollide(this)
      */
-    for (int i = 0; i < collisionSides.length; i++){
-      collisionSides[i] = false;
-    }
+
+
 
     for(int i = 0; i < mesh.length; i++){
       if(cb.checkCollide(mesh[i][0], mesh[i][1])){
         int perimeterOffset = i/(widthPartision+heightPartision);
         int simplifiedIndex = i%(widthPartision+heightPartision);
-        if(widthPartision <= simplifiedIndex && simplifiedIndex <= widthPartision + heightPartision){
-          collisionSides[1 + perimeterOffset * 2] = true;
-          //optimisations
-          if(perimeterOffset == 0){
-            i = widthPartision + heightPartision;
-          }
-        }
-        if(0 <= simplifiedIndex && simplifiedIndex <= widthPartision){
+        if(simplifiedIndex == 0){
+          advancedCollisionSides[perimeterOffset * 4] = true;
+        }else if(0 < simplifiedIndex && simplifiedIndex < widthPartision){
+          advancedCollisionSides[1 + perimeterOffset * 4] = true;
           collisionSides[perimeterOffset * 2] = true;
-          //optimizations
           i = widthPartision + perimeterOffset * (widthPartision + heightPartision);
-        }
-        if(i == 0){
-          collisionSides[0] = true;
-          collisionSides[3] = true;
+        }else if(simplifiedIndex == widthPartision){
+          advancedCollisionSides[2 + perimeterOffset * 4] = true;
+        }else if(widthPartision < simplifiedIndex && simplifiedIndex < widthPartision + heightPartision){
+          advancedCollisionSides[3 + perimeterOffset * 4] = true;
+          collisionSides[1 + perimeterOffset * 2] = true;
+          i = (widthPartision + heightPartision)*(perimeterOffset+1);
         }
       }
     }
@@ -141,7 +149,9 @@ public class CollisionBox{
   }
 
   public void reset(){
-
+    for(int i = 0; i < advancedCollisionSides.length; i++){
+      advancedCollisionSides[i] = false;
+    }
     for(int i = 0; i < collisionSides.length; i++){
       collisionSides[i] = false;
     }
@@ -166,8 +176,38 @@ public class CollisionBox{
   public boolean getCollideSide(int side){
     return collisionSides[side];
   }
+  public boolean[] getAdvancedCollideSides(){
+    return advancedCollisionSides;
+  }
   public boolean[] getCollideSides(){
     return collisionSides;
+  }
+
+  public void draw(Graphics2D g2, Entity referenceEntity){
+    int[] pointsX = new int[5];
+    int[] pointsY = new int[5];
+
+    int pWorldX = referenceEntity.worldx;
+    int pWorldY = referenceEntity.worldy;
+    int pScreenX = referenceEntity.x;
+    int pScreenY = referenceEntity.y;
+    int screenx = pScreenX-pWorldX+globalx;
+    int screeny = pScreenY-pWorldY+globaly;
+
+    pointsX[0] = screenx;
+    pointsY[0] = screeny;
+    pointsX[1] = screenx += width;
+    pointsY[1] = screeny;
+    pointsX[2] = screenx;
+    pointsY[2] = screeny += height;
+    pointsX[3] = screenx -= width;
+    pointsY[3] = screeny;
+    pointsX[4] = screenx;
+    pointsY[4] = screeny -= height;
+
+
+
+    g2.drawPolyline(pointsX, pointsY, 5);
   }
 
   public static int manhattanDistance(CollisionBox one, CollisionBox two){

@@ -9,6 +9,7 @@ public class CollisionManager{
   private static final int LOADEDCHUNKAREA = 3;//3 X 3 around the player or moving entity
 
   public static int counter = 0;
+  public static final int TimeUntilWatchUpdate = 30;
 
   ArrayList<ArrayList<CollisionBox>> subChunk;
   ArrayList<CollisionBox> watchArea; // contains sub chunk coordinates that needs to be checked
@@ -20,7 +21,7 @@ public class CollisionManager{
     //int amount = LOADEDCHUNKAREA*Chunk.chunkSize[0]/SUBCHUNKSIZE;
     referenceEntity = refernce;
     referenceChunk = referenceEntity.getCurrentChunk();
-    watchAreaBox = new CollisionBox(2500, 2500, referenceEntity.getWorldx()-1250, referenceEntity.getWorldx()-1250);
+    setWatchArea();
     // subChunk = new ArrayList[amount][amount];
     // for(int i = 0; i < amount; i++){
     //   for(int j = 0 ; j < amount ; j++){
@@ -46,6 +47,14 @@ public class CollisionManager{
     referenceChunk = referenceEntity.getCurrentChunk();
   }
 
+  public void setWatchArea(){
+    int addlength = referenceEntity.getSpeed() * TimeUntilWatchUpdate * 2;
+    int w = addlength + referenceEntity.hitbox.width;
+    int h = addlength + referenceEntity.hitbox.height;
+    watchAreaBox = new CollisionBox(w, h, referenceEntity.getWorldx()-w/2, referenceEntity.getWorldy()-h/2);
+
+  }
+
   public void print(){
     // for(ArrayList<CollisionBox> arr : subChunk){
     //   for(CollisionBox cb : arr){
@@ -65,9 +74,14 @@ public class CollisionManager{
      * TODO temporay mesure
      */
     counter++;
-    if(counter == 60){
+    if(counter == TimeUntilWatchUpdate){
       counter = 0;
       updateWatchArea();
+      //System.out.println("updated watch area");
+      //referenceEntity.printCollide();
+      //System.out.println("checking: "+watchArea.size());
+      //System.out.println(watchAreaBox.globalx + " " + watchAreaBox.globaly);
+      //referenceEntity.printPos();
       //print();
       
     }
@@ -83,10 +97,9 @@ public class CollisionManager{
 
   public void updateWatchArea(){
     /*
-     * calls every second
      */
     watchArea = new ArrayList<>();
-    watchAreaBox.moveTo(referenceEntity.x-1250, referenceEntity.y-1250);
+    watchAreaBox.moveTo(referenceEntity.worldx-(watchAreaBox.width-referenceEntity.hitbox.width)/2, referenceEntity.worldy-(watchAreaBox.height-referenceEntity.hitbox.height)/2);
     for(ArrayList<CollisionBox> arr : subChunk){
       for(CollisionBox cb : arr){
         if(cb.checkCollide(watchAreaBox)){
@@ -95,6 +108,10 @@ public class CollisionManager{
       }
     }
 
+  }
+
+  public CollisionBox getWatchAreaBox(){
+    return watchAreaBox;
   }
 
   private int fastfloor(double x){

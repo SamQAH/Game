@@ -46,7 +46,7 @@ public class Player extends Entity {
         currentChunk = new int[]{0,0};
         speed = 5;
         direction = "up";
-        hitbox = new CollisionBox(16, 16, 108, 108);
+        hitbox = new CollisionBox(32, 32, 116, 116);
 
     }
 

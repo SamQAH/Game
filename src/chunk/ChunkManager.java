@@ -69,7 +69,7 @@ public class ChunkManager {
         for(int[] key : marked){
             loadedCollisions.remove(loadedChunks.remove(key).collisionData);
             currentCoords.remove(key);
-            System.out.println("Removed "+key[0]+" "+key[1]);
+            //System.out.println("Removed "+key[0]+" "+key[1]);
         }
 
         //add and creates any chunks that are suppose to be there
@@ -84,7 +84,7 @@ public class ChunkManager {
             if(!found){
                 loadedChunks.put(coord, new Chunk(gp,coord,seed));
                 loadedCollisions.add(loadedChunks.get(coord).collisionData);
-                System.out.println("Added "+coord[0]+" "+coord[1]);
+                //System.out.println("Added "+coord[0]+" "+coord[1]);
             }
         }
         
@@ -99,5 +99,7 @@ public class ChunkManager {
             
         }
         cm.update();
+        cm.getWatchAreaBox().draw(g2,gp.getPlayer());
+        gp.getPlayer().hitbox.draw(g2,gp.getPlayer());
     }
 }

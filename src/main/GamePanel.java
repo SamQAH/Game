@@ -7,6 +7,7 @@ import chunk.ChunkManager;
 
 import java.io.*;
 
+import entitiy.Entity;
 import entitiy.Player;
 
 
@@ -148,5 +149,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public int[] getPlayerScreenPos(){
         return new int[]{player.x,player.y};
+    }
+
+    public Entity getPlayer(){
+        return player;
     }
 }
