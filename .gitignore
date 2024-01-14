@@ -7,3 +7,5 @@ chunk_data/
 file.txt
 
 .vscode
+bin/chunk/chunk_data/
+src/chunk/chunk_data/

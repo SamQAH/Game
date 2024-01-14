@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Set;
 
 import Utility.Noise2D;
+import Utility.Timer;
 import main.GamePanel;
 import tile.FoliageManager;
 import tile.TileSet;
@@ -128,14 +129,21 @@ public class Chunk{
         file = new File(fileName);
         collisionData = new ArrayList<>();
 
+        Timer timer = new Timer();
         // if(!file.exists()){
         //     this.generateChunk(seed);
         // } TODO remove when stop changing generate chunk function
         this.generateChunk(seed);
+        //System.out.print("generate chunk");
+        //timer.print();
         this.addCollision();
+        //System.out.print("add collision");
+        //timer.print();
         this.blendTiles();
-        this.writeData();
-        this.parseData();
+        // System.out.print("blend tile");
+        // timer.print();
+        // this.writeData();
+        // this.parseData();
         
 
         fm = new FoliageManager(gp, foliageData);

@@ -1,11 +1,20 @@
 package main;
 
-import java.awt.*;
-import javax.swing.*;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+
+import javax.swing.JPanel;
+
+import Utility.Timer;
 import chunk.ChunkManager;
-
-import java.io.*;
 
 import entitiy.Entity;
 import entitiy.Player;
@@ -65,7 +74,8 @@ public class GamePanel extends JPanel implements Runnable{
         long currenttime;
         long deltaTime = 1; // can be used for true speed calculations
         frameCounter = 0;
-        
+        long[] timeTracking = new long[FPS];
+        long averageFrameTime = 0;
 
         while(gameThread != null){
             currenttime = System.nanoTime();
@@ -74,16 +84,31 @@ public class GamePanel extends JPanel implements Runnable{
             lasttime = currenttime;
 
             if(frameFraction >= 1){
+                Timer timer = new Timer();
                 update();
                 repaint();
                 frameFraction--;
+                timeTracking[frameCounter] = timer.get();
+                if(frameCounter == FPS-1){
+                    frameCounter = -1;
+                    long sum = 0;
+                    for(long l : timeTracking){
+                        sum += l;
+                    }
+                    averageFrameTime = sum/FPS;
+                }
                 frameCounter++;
             }
 
-            if(chunkcounter >= 5){
+            if(chunkcounter >= 5 && frameFraction < 0.2){
+                Timer timer = new Timer();
                 cm.updateChunks();
+                System.out.print("Update chunk ");
+                System.out.println(timer.get()/frameInterval);
+                System.out.println("Averae frame "+averageFrameTime/frameInterval);
+
                 //System.out.println(player.worldx+" "+player.worldy);
-                chunkcounter-=5;
+                chunkcounter = 0;
             }
             
 
