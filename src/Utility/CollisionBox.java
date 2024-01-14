@@ -3,7 +3,6 @@ package Utility;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-import chunk.Chunk;
 import entitiy.Entity;
 
 public class CollisionBox{

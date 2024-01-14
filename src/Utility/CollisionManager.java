@@ -1,6 +1,5 @@
 package Utility;
 
-import chunk.Chunk;
 import entitiy.Entity;
 import java.util.ArrayList;
 

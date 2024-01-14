@@ -129,7 +129,7 @@ public class Chunk{
         file = new File(fileName);
         collisionData = new ArrayList<>();
 
-        Timer timer = new Timer();
+        //Timer timer = new Timer();
         // if(!file.exists()){
         //     this.generateChunk(seed);
         // } TODO remove when stop changing generate chunk function
