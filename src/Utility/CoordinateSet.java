@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CoordinateSet {
-    ArrayList<int[]> coordset;
+    public ArrayList<int[]> coordset;
 
     public CoordinateSet(){
         coordset = new ArrayList<>();
@@ -59,5 +59,14 @@ public class CoordinateSet {
             }
         }
         return false;
+    }
+
+    public void remove(int[] coord){
+        for(int[] cord : coordset){
+            if(Arrays.equals(cord, coord)){
+                coordset.remove(cord);
+                return;
+            }
+        }
     }
 }

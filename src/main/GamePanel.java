@@ -1,6 +1,7 @@
 package main;
 
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -128,6 +129,7 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(5));
         cm.draw(g2);
         player.draw(g2);
         g2.dispose();

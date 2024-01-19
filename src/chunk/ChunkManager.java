@@ -101,5 +101,8 @@ public class ChunkManager {
         cm.update();
         cm.getWatchAreaBox().draw(g2,gp.getPlayer());
         gp.getPlayer().hitbox.draw(g2,gp.getPlayer());
+        for(CollisionBox cb : cm.getWatchArea()){
+            cb.draw(g2,gp.getPlayer());
+        }
     }
 }

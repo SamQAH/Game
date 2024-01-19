@@ -48,6 +48,7 @@ public enum TileSet {
         if(adjacent.size() < 2){
             return null;
         }
+        
 
         HashMap<Integer, int[]> importantSides = new HashMap<>();
         int first = 0;
@@ -87,6 +88,13 @@ public enum TileSet {
             return null;
         }else{
             return matches.get(1);
+        }
+    }
+
+    private static void reverse(int[] array){
+        int[] temp = array.clone();
+        for (int i = 0; i < array.length; i++) {
+            array[i] = temp[array.length-i];
         }
     }
 }

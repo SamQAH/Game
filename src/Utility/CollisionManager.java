@@ -113,6 +113,10 @@ public class CollisionManager{
     return watchAreaBox;
   }
 
+  public ArrayList<CollisionBox> getWatchArea(){
+    return watchArea;
+  }
+
   private int fastfloor(double x){
     return x<0 ? (int)(x-1) : (int)x;
   }

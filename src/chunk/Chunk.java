@@ -19,6 +19,7 @@ import tile.FoliageManager;
 import tile.TileSet;
 import tile.TileManager;
 import Utility.CollisionBox;
+import Utility.CoordinateSet;
 
 
 /*
@@ -262,6 +263,7 @@ public class Chunk{
         int row = 0;
         int col = 0;
         HashMap<int[], Integer> requestedChanges = new HashMap<>();
+        CoordinateSet basicBlendedTile = new CoordinateSet();
         while(col < chunkSize[1]){
             /* only for ocean tiles so far
              * basic blending, only look at basic tiles like grass, ocean, sand
@@ -282,7 +284,9 @@ public class Chunk{
                 }
                 int index = OceanBlendRules.findBlendedTile(cd).index;
                 if(index != 1){
-                    requestedChanges.put(new int[]{row,col},index);
+                    int[] temp = new int[]{row,col};
+                    requestedChanges.put(temp,index);
+                    basicBlendedTile.addCoord(temp);
                 }
             }
             
@@ -293,58 +297,40 @@ public class Chunk{
                 col++;
             }
         }
-        //TODO switch to Utility coordinateset
+        
         Set<int[]> coordSet = requestedChanges.keySet();
         ArrayList<int[]> overLap = new ArrayList<>();
-        ArrayList<int[]> currentAdjacent = new ArrayList<>();
+        CoordinateSet advReq = new CoordinateSet();
         for(int[] coord : coordSet){
             tileData[coord[1]][coord[0]] = requestedChanges.get(coord);
-            currentAdjacent.add(new int[]{coord[0]+1,coord[1]});
-            currentAdjacent.add(new int[]{coord[0]-1,coord[1]});
-            currentAdjacent.add(new int[]{coord[0],coord[1]+1});
-            currentAdjacent.add(new int[]{coord[0],coord[1]-1});
-        }
-        // remove the coords that are already in coordSet
-        for(int i = 0; i < currentAdjacent.size(); i++){
-            for(int[] coord : coordSet){
-                if(Arrays.equals(currentAdjacent.get(i),coord)){
-                    currentAdjacent.remove(i);
-                    break;
-                }
-            }
+            advReq.addCoord(new int[]{coord[0]+1,coord[1]});
+            advReq.addCoord(new int[]{coord[0]-1,coord[1]});
+            advReq.addCoord(new int[]{coord[0],coord[1]+1});
+            advReq.addCoord(new int[]{coord[0],coord[1]-1});
         }
 
-        // finds duplicates and puts them in overlap
-        ArrayList<int[]> temp = new ArrayList<>();
-        for(int[] coord : currentAdjacent){
-            if(temp.contains(coord) && !overLap.contains(coord)){
-                overLap.add(coord);
+        // remove the coords that are already in basicBlendedTile
+        for(int i = 0; i < advReq.coordset.size(); ){
+            if(basicBlendedTile.contains(advReq.coordset.get(i))){
+                advReq.coordset.remove(i);
             }else{
-                temp.add(coord);
+                i++;
             }
         }
-        HashMap<int[],Integer> newrequest = new HashMap<>();
-        HashMap<Integer,Integer> adj;
-        for(int[] coord : overLap){
-            adj = new HashMap<>();
-            for(int[] coords : coordSet){
-                if(coord[1]-1 == coords[1]){
-                    adj.put(0,requestedChanges.get(coords));
-                }else if(coord[0]+1 == coords[0]){
-                    adj.put(1,requestedChanges.get(coords));
-                }else if(coord[1]+1 == coords[1]){
-                    adj.put(2,requestedChanges.get(coords));
-                }else if(coord[0]-1 == coords[0]){
-                    adj.put(3,requestedChanges.get(coords));
-                }
+
+        // creates a hashmap containing adjacent tile's index, pass to TileSet to get advanced blended tile
+        for (int[] is : advReq.coordset) {
+            HashMap<Integer, Integer> adjSides = new HashMap<>();
+            adjSides.put(0,tileData[is[1]-1][is[0]]);
+            adjSides.put(1,tileData[is[1]][is[0]+1]);
+            adjSides.put(2,tileData[is[1]+1][is[0]]);
+            adjSides.put(3,tileData[is[1]][is[0]-1]);
+            TileSet t = TileSet.findBySide(adjSides);
+            if(t != null){
+                tileData[is[1]][is[0]] = t.index;
             }
-            newrequest.put(coord,TileSet.findBySide(adj).index);
-        }
 
-        for(int[] coord : newrequest.keySet()){
-            tileData[coord[1]][coord[0]] = newrequest.get(coord);
         }
-
         
         
     }
