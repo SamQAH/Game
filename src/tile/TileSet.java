@@ -56,7 +56,7 @@ public enum TileSet {
         boolean need = true;
         for(Integer i : adjacent.keySet()){
             int touchingside = (i + 2) & 3;
-            int[] sideinfo = findByIndex(adjacent.get(i)).sides[touchingside];
+            int[] sideinfo = reverse(findByIndex(adjacent.get(i)).sides[touchingside]);
             
             if(need){
                 first = touchingside;
